@@ -1,0 +1,34 @@
+from fastapi import Depends, APIRouter
+from sqlalchemy.orm import Session
+from database.connection import get_db
+from schemas.user.user_schemas import UserRequest, UserResponseBase
+from typing import List
+from services.user.user_service import create_user, get_all_users, get_user
+
+router = APIRouter()
+
+@router.post("/register", status_code=201, response_model=UserResponseBase)
+def register_user(user: UserRequest, db: Session = Depends(get_db)):
+    new_user = create_user(user, db)
+
+    return {
+        "message": "User created.",
+        "user": new_user
+    }
+
+@router.get("/all", response_model=List[UserResponseBase])
+def find_all_users(db: Session = Depends(get_db)):
+    users = get_all_users(db)
+    return {
+        "message": "Users list.",
+        "user": users
+    }
+
+@router.get("/find/{id}", response_model=UserResponseBase)
+def find_user_by_id(id: int, db: Session = Depends(get_db)):
+    user_found = get_user(id, db)
+
+    return {
+        "message": "User found.",
+        "user": user_found
+    }

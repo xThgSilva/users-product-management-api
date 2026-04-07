@@ -10,7 +10,7 @@ class ProductRequest(BaseModel):
 class ProductResponse(BaseModel):
     id: int
     name: str
-    description: str
+    description: Optional[str] = None
     price: float
     quantity: int
 
