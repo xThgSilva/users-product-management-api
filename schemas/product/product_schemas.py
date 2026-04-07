@@ -1,0 +1,23 @@
+from pydantic import BaseModel
+from typing import Optional
+
+class ProductRequest(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    quantity: int
+
+class ProductResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+    price: float
+    quantity: int
+
+    class Config:
+        from_attributes = True
+
+class ProductResponseBase(BaseModel):
+    message: str
+    product: ProductResponse
+    
