@@ -31,4 +31,21 @@ def delete_product_by_id(id, db):
         db.delete(product_to_delete)
         db.commit()
     else:
-        raise HTTPException(status_code=404, detail= f"Product with Id {id} not delete.")
+        raise HTTPException(status_code=404, detail= f"Product with Id {id} not found to delete.")
+    
+def update_product_by_id(id, product, db):
+    product_to_update = db.query(Product).filter(Product.id == id).first()
+
+    if product_to_update:
+        product_to_update.name = product.name
+        product_to_update.description = product.description
+        product_to_update.price = product.price
+        product_to_update.quantity = product.quantity
+
+        db.commit()
+        db.refresh(product_to_update)
+
+        return product_to_update
+    else:
+        raise HTTPException(status_code=404, detail= f"Product with Id {id} not found to update.")
+

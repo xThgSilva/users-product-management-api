@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database.connection import get_db
 from schemas.product.product_schemas import ProductRequest, ProductResponseBase, ProductListResponse
 from typing import List
-from services.product.product_service import create_product, get_all_products, get_product_by_id, delete_product_by_id
+from services.product.product_service import create_product, get_all_products, get_product_by_id, delete_product_by_id, update_product_by_id
 
 router = APIRouter(
     prefix="/products",
@@ -25,4 +25,26 @@ def list_all_products(db: Session = Depends(get_db)):
     return {
         "message": "Products list.",
         "products": products
+    }
+
+@router.get("product/{id}", response_model=ProductResponseBase)
+def get_product(id: int, db: Session = Depends(get_db)):
+    product = get_product_by_id(id, db)
+
+    return {
+        "message": "Product found",
+        "product": product
+    }
+
+@router.delete("/delete/{id}", status_code=204)
+def delete_product(id: int, db: Session = Depends(get_db)):
+    delete_product_by_id(id, db)
+
+@router.put("update/{id}", response_model=ProductResponseBase)
+def update_product(id: int, product: ProductRequest, db: Session = Depends(get_db)):
+    product_updated = update_product_by_id(id, product, db)
+
+    return {
+        "message": "Product updated.",
+        "product": product_updated
     }
