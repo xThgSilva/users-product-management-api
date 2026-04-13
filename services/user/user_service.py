@@ -39,7 +39,7 @@ def update_user_by_id(id, db, user):
     user_to_update = db.query(Users).filter(Users.id == id).first()
 
     if user_to_update:
-        user_to_update.nome = user.nome
+        user_to_update.name = user.name
         user_to_update.email = user.email
 
         db.commit()

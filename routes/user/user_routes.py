@@ -38,7 +38,7 @@ def delete_user(id: int, db: Session = Depends(get_db)):
     delete_user_by_id(id, db)
 
 @router.put("/update/{id}", response_model=UserResponseBase)
-def update_user(user: UserRequest, id: int, db: Session = Depends(get_db)):
+def update_user( id: int, user: UserRequest,db: Session = Depends(get_db)):
     user_updated = update_user_by_id(id, db, user)
 
     return {
