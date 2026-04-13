@@ -5,7 +5,10 @@ from schemas.user.user_schemas import UserRequest, UserResponseBase, UsersListRe
 from typing import List
 from services.user.user_service import create_user, get_all_users, get_user,delete_user_by_id, update_user_by_id
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/users", 
+    tags=["Users"]
+)
 
 @router.post("/register", status_code=201, response_model=UserResponseBase)
 def register_user(user: UserRequest, db: Session = Depends(get_db)):

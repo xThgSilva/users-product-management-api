@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 class ProductRequest(BaseModel):
     name: str
@@ -20,4 +20,8 @@ class ProductResponse(BaseModel):
 class ProductResponseBase(BaseModel):
     message: str
     product: ProductResponse
+
+class ProductListResponse(BaseModel):
+    message: str
+    products: List[ProductResponse]
     
