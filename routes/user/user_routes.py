@@ -1,9 +1,9 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 from database.connection import get_db
-from schemas.user.user_schemas import UserRequest, UserResponseBase
+from schemas.user.user_schemas import UserRequest, UserResponseBase, UsersListResponse
 from typing import List
-from services.user.user_service import create_user, get_all_users, get_user
+from services.user.user_service import create_user, get_all_users, get_user,delete_user_by_id
 
 router = APIRouter()
 
@@ -16,12 +16,12 @@ def register_user(user: UserRequest, db: Session = Depends(get_db)):
         "user": new_user
     }
 
-@router.get("/all", response_model=List[UserResponseBase])
+@router.get("/all", response_model=UsersListResponse)
 def find_all_users(db: Session = Depends(get_db)):
     users = get_all_users(db)
     return {
         "message": "Users list.",
-        "user": users
+        "users": users
     }
 
 @router.get("/find/{id}", response_model=UserResponseBase)
@@ -32,3 +32,7 @@ def find_user_by_id(id: int, db: Session = Depends(get_db)):
         "message": "User found.",
         "user": user_found
     }
+
+@router.delete("/delete/{id}", status_code=204)
+def delete_user(id: int, db: Session = Depends(get_db)):
+    delete_user_by_id(id, db)

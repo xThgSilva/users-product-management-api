@@ -25,3 +25,12 @@ def get_user(id, db):
         return user_found
     else:
         raise HTTPException(status_code=404, detail= f"User with Id {id} not found.")
+    
+def delete_user_by_id(id, db):
+    user_to_delete = db.query(Users).filter(Users.id == id).first()
+
+    if user_to_delete:
+        db.delete(user_to_delete)
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail= f"User with Id {id} not found")

@@ -6,4 +6,8 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
+@app.get("/")
+def api_start():
+    return {"message": "API started 🚀"}
+
 app.include_router(user_routes.router)
