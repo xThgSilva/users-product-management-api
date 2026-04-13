@@ -34,3 +34,17 @@ def delete_user_by_id(id, db):
         db.commit()
     else:
         raise HTTPException(status_code=404, detail= f"User with Id {id} not found")
+    
+def update_user_by_id(id, db, user):
+    user_to_update = db.query(Users).filter(Users.id == id).first()
+
+    if user_to_update:
+        user_to_update.nome = user.nome
+        user_to_update.email = user.email
+
+        db.commit()
+        db.refresh(user_to_update)
+
+        return user_to_update
+    else:
+        raise HTTPException(status_code=404, detail= f"User with Id {id} not found to update")
