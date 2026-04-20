@@ -1,5 +1,6 @@
 from models.user.user_model import Users
 from fastapi import HTTPException
+from auth.security import hash_password
 
 def create_user(user, db):
     user_existing = db.query(Users).filter(Users.email == user.email).first()
@@ -7,7 +8,7 @@ def create_user(user, db):
     if user_existing:
         raise HTTPException(status_code=409, detail= "This e-mail is already registered")
     else:
-        new_user = Users(name=user.name, email=user.email, password=user.password)
+        new_user = Users(name=user.name, email=user.email, password=hash_password(user.password))
 
         db.add(new_user)
         db.commit()
