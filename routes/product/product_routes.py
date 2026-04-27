@@ -4,6 +4,8 @@ from database.connection import get_db
 from schemas.product.product_schemas import ProductRequest, ProductResponseBase, ProductListResponse
 from typing import List
 from services.product.product_service import create_product, get_all_products, get_product_by_id, delete_product_by_id, update_product_by_id
+from auth.get_user import get_current_user
+from models.user.user_model import Users
 
 router = APIRouter(
     prefix="/products",
@@ -20,7 +22,7 @@ def register_product(product: ProductRequest, db: Session = Depends(get_db)):
     }
 
 @router.get("/all", response_model=ProductListResponse)
-def list_all_products(db: Session = Depends(get_db)):
+def list_all_products(db: Session = Depends(get_db), current_user: Users = Depends(get_current_user)):
     products = get_all_products(db)
     return {
         "message": "Products list.",

@@ -2,8 +2,10 @@ from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 from database.connection import get_db
 from schemas.user.user_schemas import UserRequest, UserResponseBase, UsersListResponse
-from typing import List
 from services.user.user_service import create_user, get_all_users, get_user,delete_user_by_id, update_user_by_id
+from auth.get_user import get_current_user
+from models.user.user_model import Users
+
 
 router = APIRouter(
     prefix="/users", 
@@ -20,7 +22,7 @@ def register_user(user: UserRequest, db: Session = Depends(get_db)):
     }
 
 @router.get("/all", response_model=UsersListResponse)
-def find_all_users(db: Session = Depends(get_db)):
+def find_all_users(db: Session = Depends(get_db), current_user: Users = Depends(get_current_user)):
     users = get_all_users(db)
     return {
         "message": "Users list.",
